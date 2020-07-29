@@ -8,9 +8,9 @@
 
 [![NPM](https://nodei.co/npm/gtfs.png?downloads=true)](https://nodei.co/npm/gtfs/)
 
-`node-GTFS` loads transit data in [GTFS format](https://developers.google.com/transit/) into a MongoDB database and provides some methods to query for agencies, routes, stops, times, fares, calendars and other GTFS data. It also offers spatial queries to find nearby stops, routes and agencies and can convert stops and shapes to geoJSON format.
+`node-GTFS` loads transit data in [GTFS format](https://developers.google.com/transit/) into a SQLite database and provides some methods to query for agencies, routes, stops, times, fares, calendars and other GTFS data. It also offers spatial queries to find nearby stops, routes and agencies and can convert stops and shapes to geoJSON format.
 
-Additionally, this librarty can export data from mongoDB back into GTFS (csv) format.
+Additionally, this library can export data from the SQLite database back into GTFS (csv) format.
 
 This library has three parts: the [GTFS import script](#gtfs-import-script), the [query methods](#query-methods) and the [GTFS export script](#gtfs-export-script)
 
@@ -26,30 +26,22 @@ The [GTFS-to-chart](https://github.com/blinktaginc/gtfs-to-chart) app generates 
 
 If you would like to use this library as a command-line utility, you can install it globally directly from [npm](https://npmjs.org):
 
-    npm install gtfs mongoose -g
+    npm install gtfs -g
 
 If you are using this as a node module as part of an application, you can include it in your project's `package.json` file.
 
-Note: [Mongoose](http://mongoosejs.com/) is a peer dependency of `node-gtfs`, so when installing globally be sure to install mongoose as well. If you are writing a application that uses `node-gtfs` as a dependency, then you'll need to include mongoose as a dependency in your project's `package.json`.
-
 ## Command-line example
 
-    gtfs-import [--configPath /path/to/your/custom-config.json] [--skipDelete]
-
-    gtfs-export [--configPath /path/to/your/custom-config.json]
+    gtfs-import [--configPath /path/to/your/custom-config.json]
 
 ## Code example
 
     const gtfs = require('gtfs');
-    const mongoose = require('mongoose');
     const config = require('./config.json');
-
-    mongoose.connect(config.mongoUrl, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 
     gtfs.import(config)
     .then(() => {
       console.log('Import Successful');
-      return mongoose.connection.close();
     })
     .catch(err => {
       console.error(err);
@@ -66,11 +58,9 @@ Copy `config-sample.json` to `config.json` and then add your projects configurat
 | option | type | description |
 | ------ | ---- | ----------- |
 | [`agencies`](#agencies) | array | An array of GTFS files to be imported. |
-| [`csvOptions`](#csvOptions) | object | Options passed to `csv-parse` for parsing GTFS CSV files. |
-| [`dataExpireAfterSeconds`](#dataExpireAfterSeconds) | integer | The number of seconds after which the data will be deleted from mongodb using a TTL index. Optional, if not specified then data will not be automatically deleted. |
-| [`mongoUrl`](#mongoUrl) | string | The URL of the MongoDB database to import to. |
-| [`verbose`](#verbose) | boolean | Whether or not to print output to the console. |
-| [`skipDelete`](#skipDelete) | boolean | Whether or not to skip deleting existing data from the database. |
+| [`csvOptions`](#csvOptions) | object | Options passed to `csv-parse` for parsing GTFS CSV files. Optional. |
+| [`sqlitePath`](#sqlitePath) | string | A path to an SQLite database. Optional, defaults to using an in-memory database. |
+| [`verbose`](#verbose) | boolean | Whether or not to print output to the console. Optional, defaults to true. |
 
 ### agencies
 
@@ -150,20 +140,6 @@ API along with your API token.
 }
 ```
 
-* Optionally specify a proj4 projection string to correct poorly formed coordinates in the GTFS file
-
-```
-{
-  "agencies": [
-    {
-      "agency_key": "myAgency",
-      "path": "/path/to/the/unzipped/gtfs/",
-      "proj": "+proj=lcc +lat_1=46.8 +lat_0=46.8 +lon_0=0 +k_0=0.99987742 +x_0=600000 +y_0=2200000 +a=6378249.2 +b=6356515 +towgs84=-168,-60,320,0,0,0,0 +pm=paris +units=m +no_defs"
-    }
-  ]
-}
-```
-
 ### csvOptions
 
 {Object} Add options to be passed to [`csv-parse`](https://csv.js.org/parse/) wiith the key `csvOptions`. This is an optional paramenter.
@@ -179,28 +155,13 @@ For instance, if you wanted to skip importing invalid lines in the GTFS file:
 
 See [full list of options](https://csv.js.org/parse/options/).
 
-### dataExpireAfterSeconds
+### sqlitePath
 
-{Integer} The number of seconds after which the data will be deleted from mongodb using a [TTL index](https://docs.mongodb.com/manual/core/index-ttl/). Optional, if not specified then data will not be automatically deleted.
-
-```
-    "dataExpireAfterSeconds": 3600
-```
-
-### mongoUrl
-
-{String} The MongoDB URI use. When running locally, you may want to use `mongodb://localhost:27017/gtfs`.
+{String} A path to an SQLite database. Optional, defaults to using an in-memory database.
 
 ```
-{
-  "mongoUrl": "mongodb://localhost:27017/gtfs",
-  "agencies": [
-    {
-      "agency_key": "myAgency",
-      "path": "/path/to/the/unzipped/gtfs/"
-    }
-  ]
-}
+
+    "sqlitePath": "/dev/sqlite/gtfs"
 ```
 
 ### verbose
@@ -209,7 +170,6 @@ See [full list of options](https://csv.js.org/parse/options/).
 
 ```
 {
-  "mongoUrl": "mongodb://localhost:27017/gtfs",
   "agencies": [
     {
       "agency_key": "localAgency",
@@ -223,10 +183,8 @@ See [full list of options](https://csv.js.org/parse/options/).
 If you want to route logs to a custom function, you can pass a function that takes a single `text` argument as `logFunction`. This can't be defined in `config.json` but instead passed in a config object to `gtfs.import()`.  For example:
 
     const gtfs = require('gtfs');
-    const mongoose = require('mongoose');
 
     const config = {
-      mongoUrl: 'mongodb://localhost:27017/gtfs',
       agencies: [
         {
           agency_key: 'county-connection',
@@ -242,36 +200,11 @@ If you want to route logs to a custom function, you can pass a function that tak
       }
     };
 
-    mongoose.connect(config.mongoUrl, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
-
     gtfs.import(config);
-
-### skipDelete
-
-If you don't want the import script to delete all existing data from the database with the same `agency_key`, you can set `skipDelete` to `true`. Defaults to `false`.
-
-```
-{
-  "mongoUrl": "mongodb://localhost:27017/gtfs",
-  "agencies": [
-    {
-      "agency_key": "localAgency",
-      "path": ""/path/to/the/unzipped/gtfs/"
-    }
-  ],
-  "skipDelete": true
-}
-```
 
 ## `gtfs-import` Script
 
-The `gtfs-import` script reads from a JSON configuration file and imports the GTFS files specified to a MongoDB database. [Read more on setting up your configuration file](#configuration).
-
-### Make sure MongoDB is running
-
-If you want to run this locally, make sure MongoDB in installed and running.
-
-    mongod
+The `gtfs-import` script reads from a JSON configuration file and imports the GTFS files specified to a SQLite database. [Read more on setting up your configuration file](#configuration).
 
 ### Run the `gtfs-import` script from Command-line
 
@@ -282,11 +215,6 @@ By default, it will look for a `config.json` file in the project root. To specif
     gtfs-import --configPath /path/to/your/custom-config.json
 
 ### Command Line options
-
-#### Skip Delete
-By default, the import script will delete any existing data with the same `agency_key` from your database. If you don't want this to happen, pass the `--skipDelete` flag
-
-    gtfs-import --skipDelete
 
 #### Specify path to config JSON file
 You can specify the path to a config file to be used by the import script.
@@ -304,15 +232,11 @@ Show all command line options
 Use `gtfs.import()` in your code to run an import of a GTFS file specified in a config.json file.
 
     const gtfs = require('gtfs');
-    const mongoose = require('mongoose');
     const config = require('config.json');
-
-    mongoose.connect(config.mongoUrl, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 
     gtfs.import(config)
     .then(() => {
       console.log('Import Successful');
-      return mongoose.connection.close();
     })
     .catch(err => {
       console.error(err);
@@ -321,9 +245,7 @@ Use `gtfs.import()` in your code to run an import of a GTFS file specified in a 
 Configuration can be a JSON object in your code
 
     const gtfs = require('gtfs');
-    const mongoose = require('mongoose');
     const config = {
-      mongoUrl: 'mongodb://localhost:27017/gtfs',
       agencies: [
         {
           agency_key: 'county-connection',
@@ -335,12 +257,9 @@ Configuration can be a JSON object in your code
       ]
     };
 
-    mongoose.connect(config.mongoUrl, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true );
-
     gtfs.import(config)
     .then(() => {
       console.log('Import Successful');
-      return mongoose.connection.close();
     })
     .catch(err => {
       console.error(err);
@@ -348,17 +267,11 @@ Configuration can be a JSON object in your code
 
 ## `gtfs-export` Script
 
-The `gtfs-export` script reads from a JSON configuration file and exports data in GTFS format from a MongoDB database. [Read more on setting up your configuration file](#configuration).
+The `gtfs-export` script reads from a JSON configuration file and exports data in GTFS format from a SQLite database. [Read more on setting up your configuration file](#configuration).
 
-This could be used to export a GTFS file from mongodb after changes have been made to the data in the database manually.
+This could be used to export a GTFS file from SQLite after changes have been made to the data in the database manually.
 
-### Make sure MongoDB is running
-
-If you want to run this locally, make sure MongoDB in installed and running.
-
-    mongod
-
-### Make sure to import GTFS data into mongoDB first
+### Make sure to import GTFS data into SQLite first
 
 Nothing will be exported if there is no data to export. See the [GTFS import script](#gtfs-import-script).
 
@@ -387,9 +300,7 @@ Show all command line options
 Use `gtfs.export()` in your code to run an export of a GTFS file specified in a config.json file.
 
     const gtfs = require('gtfs');
-    const mongoose = require('mongoose');
     const config = {
-      mongoUrl: 'mongodb://localhost:27017/gtfs',
       agencies: [
         {
           agency_key: 'county-connection',
@@ -401,12 +312,9 @@ Use `gtfs.export()` in your code to run an export of a GTFS file specified in a 
       ]
     };
 
-    mongoose.connect(config.mongoUrl, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
-
     gtfs.export(config)
     .then(() => {
       console.log('Export Successful');
-      return mongoose.connection.close();
     })
     .catch(err => {
       console.error(err);
@@ -436,48 +344,11 @@ For example, to get a list of all agencies within 5 miles of a specific point:
       // Be sure to handle errors here
     });
 
-#### Projection
-By default, `projection` is set to exclude mongo `_id`. [`projection`](http://mongoosejs.com/docs/api.html#query_Query-select) allows specifying which fields you would like returned. For instance:
-
-    // Gets all agencies but limits results to only include `agency_name` and `agency_lang`.
-    gtfs.getAgencies({}, {
-      _id: 0,
-      agency_name: 1,
-      agency_lang: 1
-    })
-    .then(agencies => {
-      // each Agency only has `agency_name` and `agency_lang`
-    });
-
-
-#### Options
-Mongoose allows [numerous options to be set on the query](http://mongoosejs.com/docs/api.html#query_Query-setOptions). You can specify things like `sort` and `limit` using the `options` parameter.  By default, `options` is set to `lean: true` to return a plain javascript object.
-
-    // Gets all agencies sorted by `agency_name`
-    gtfs.getAgencies({}, {}, {
-      sort: {agency_name: 1}
-    })
-    .then(agencies => {
-
-    });
-
 ### Setup
 
 Include this library.
 
-    var gtfs = require('gtfs');
-
-Connect to mongo via mongoose.
-
-    const mongoose = require('mongoose');
-    mongoose.connect('YOUR-MONGODB-URI');
-
-If you are running locally, your MongoDB uri might be something like:
-
-    mongodb://localhost:27017/gtfs
-
-You probably want to use the same value used in your [configuration JSON file](#configuration) for importing GTFS.
-
+    const gtfs = require('gtfs');
 
 ### gtfs.getAgencies(query, projection, options)
 

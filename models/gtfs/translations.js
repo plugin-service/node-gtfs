@@ -1,5 +1,5 @@
 module.exports = {
-  filenameBase: 'agency',
+  filenameBase: 'translations',
   schema: [
     {
       name: 'id',
@@ -7,39 +7,36 @@ module.exports = {
       primary: true
     },
     {
-      name: 'agency_id',
+      name: 'table_name',
+      type: 'varchar(255)',
+      required: true
+    },
+    {
+      name: 'field_name',
+      type: 'varchar(255)',
+      required: true
+    },
+    {
+      name: 'language',
+      type: 'varchar(255)',
+      required: true
+    },
+    {
+      name: 'translation',
+      type: 'varchar(255)',
+      required: true
+    },
+    {
+      name: 'record_id',
       type: 'varchar(255)'
     },
     {
-      name: 'agency_name',
-      type: 'varchar(255)',
-      required: true
-    },
-    {
-      name: 'agency_url',
-      type: 'varchar(255)',
-      required: true
-    },
-    {
-      name: 'agency_timezone',
-      type: 'varchar(255)',
-      required: true
-    },
-    {
-      name: 'agency_lang',
+      name: 'record_sub_id',
       type: 'varchar(255)'
     },
     {
-      name: 'agency_phone',
-      type: 'varchar(64)'
-    },
-    {
-      name: 'agency_fare_url',
-      type: 'varchar(1020)'
-    },
-    {
-      name: 'agency_email',
+      name: 'field_value',
       type: 'varchar(255)'
     }
   ]
-}
+};
