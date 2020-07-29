@@ -2,9 +2,13 @@ module.exports = {
   filenameBase: 'timetables',
   schema: [
     {
-      name: 'timetable_id',
-      type: 'varchar(255)',
+      name: 'id',
+      type: 'integer',
       primary: true
+    },
+    {
+      name: 'timetable_id',
+      type: 'varchar(255)'
     },
     {
       name: 'route_id',
