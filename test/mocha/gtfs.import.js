@@ -7,7 +7,7 @@ const extract = require('extract-zip');
 const parse = require('csv-parse');
 const should = require('should');
 
-const { openDb } = require('../../lib/db');
+const { openDb, closeDb } = require('../../lib/db');
 const gtfs = require('../..');
 const models = require('../../models/models');
 
@@ -37,7 +37,7 @@ describe('lib/import.js', function () {
   });
 
   after(async () => {
-    await db.close();
+    await closeDb();
   });
 
   this.timeout(10000);

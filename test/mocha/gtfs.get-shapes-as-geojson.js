@@ -3,7 +3,7 @@
 const path = require('path');
 const should = require('should');
 
-const { openDb } = require('../../lib/db');
+const { openDb, closeDb } = require('../../lib/db');
 const gtfs = require('../..');
 
 const config = {
@@ -14,16 +14,14 @@ const config = {
   verbose: false
 };
 
-let db;
-
 describe('gtfs.getShapesAsGeoJSON():', () => {
   before(async () => {
-    db = await openDb(config);
+    await openDb(config);
     await gtfs.import(config);
   });
 
   after(async () => {
-    await db.close();
+    await closeDb();
   });
 
   it('should return geojson with an empty features array if no shapes exist', async () => {

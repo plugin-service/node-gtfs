@@ -3,7 +3,7 @@
 const path = require('path');
 const should = require('should');
 
-const { openDb } = require('../../lib/db');
+const { openDb, closeDb } = require('../../lib/db');
 const gtfs = require('../..');
 
 const config = {
@@ -14,26 +14,23 @@ const config = {
   verbose: false
 };
 
-let db;
-
 describe('gtfs.getAgencies():', () => {
   before(async () => {
-    db = await openDb(config);
+    await openDb(config);
     await gtfs.import(config);
   });
 
   after(async () => {
-    await db.close();
+    await closeDb();
   });
 
   it('should return empty array if no agencies exist', async () => {
-    await db.all('DELETE FROM agency;');
-
-    const results = await gtfs.getAgencies(config);
+    const agencyId = 'fake-agency-id';
+    const results = await gtfs.getAgencies(config, {
+      agency_id: agencyId
+    });
     should.exists(results);
     results.should.have.length(0);
-
-    await gtfs.import(config);
   });
 
   it('should return expected agencies with no query', async () => {
