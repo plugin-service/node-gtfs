@@ -2,10 +2,8 @@
 
 const path = require('path');
 const should = require('should');
-const tk = require('timekeeper');
 
 const { openDb } = require('../../lib/db');
-const timeReference = new Date();
 const gtfs = require('../..');
 
 const config = {
@@ -21,15 +19,11 @@ let db;
 describe('gtfs.getAgencies():', () => {
   before(async () => {
     db = await openDb(config);
-
     await gtfs.import(config);
-    
-    tk.freeze(timeReference);
   });
 
   after(async () => {
     await db.close();
-    tk.reset();
   });
 
   it('should return empty array if no agencies exist', async () => {
