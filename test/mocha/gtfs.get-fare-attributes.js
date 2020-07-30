@@ -32,7 +32,7 @@ describe('gtfs.getFareAttributes():', () => {
     const results = await gtfs.getFareAttributes(config, {
       fare_id: fareId
     });
-  
+
     should.exists(results);
     results.should.have.length(0);
   });

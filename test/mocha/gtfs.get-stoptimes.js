@@ -68,7 +68,7 @@ describe('gtfs.getStoptimes():', () => {
       if (lastStopSequence !== undefined) {
         result.stop_sequence.should.be.greaterThan(lastStopSequence);
       }
-  
+
       lastStopSequence = result.stop_sequence;
     }
   });

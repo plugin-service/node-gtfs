@@ -67,7 +67,6 @@
   "devDependencies": {
     "mocha": "^8.0.1",
     "should": "^13.2.3",
-    "timekeeper": "^2.2.0",
     "xo": "^0.32.1"
   },
   "repository": {

@@ -23,7 +23,7 @@ let db;
 
 const agenciesFixturesRemote = [{
   agency_key: 'caltrain',
-  path: path.join(__dirname, '../fixture/caltrain_20160406.zip')
+  url: 'http://transitfeeds.com/p/caltrain/122/20160406/download'
 }];
 
 const agenciesFixturesLocal = [{
@@ -45,11 +45,19 @@ describe('lib/import.js', function () {
     it('should be able to download and import from HTTP', async () => {
       config.agencies = agenciesFixturesRemote;
       await gtfs.import(config);
+
+      const routes = await gtfs.getRoutes(config);
+      should.exist(routes);
+      routes.length.should.equal(4);
     });
 
     it('should be able to download and import from local filesystem', async () => {
       config.agencies = agenciesFixturesLocal;
       await gtfs.import(config);
+
+      const routes = await gtfs.getRoutes(config);
+      should.exist(routes);
+      routes.length.should.equal(4);
     });
   });
 
