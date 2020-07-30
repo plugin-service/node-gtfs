@@ -12,7 +12,7 @@ const config = {
     path: path.join(__dirname, '../fixture/caltrain_20160406.zip')
   }],
   verbose: false
-}
+};
 
 let db;
 
@@ -27,7 +27,7 @@ describe('gtfs.getAgencies():', () => {
   });
 
   it('should return empty array if no agencies exist', async () => {
-    await db.all(`DELETE FROM agency;`);
+    await db.all('DELETE FROM agency;');
 
     const results = await gtfs.getAgencies(config);
     should.exists(results);
@@ -49,7 +49,7 @@ describe('gtfs.getAgencies():', () => {
       agency_phone: '800-660-4287',
       agency_fare_url: null,
       agency_email: null
-    }
+    };
 
     should.exist(results);
     results.length.should.equal(1);
@@ -75,7 +75,7 @@ describe('gtfs.getAgencies():', () => {
       agency_phone: '800-660-4287',
       agency_fare_url: null,
       agency_email: null
-    }
+    };
 
     should.exist(results);
     results.length.should.equal(1);

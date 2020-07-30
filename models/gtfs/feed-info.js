@@ -44,6 +44,6 @@ module.exports = {
     {
       name: 'feed_contact_url',
       type: 'varchar(255)'
-    },
+    }
   ]
 };

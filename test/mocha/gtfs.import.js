@@ -3,19 +3,27 @@
 
 const path = require('path');
 const fs = require('fs');
-
 const extract = require('extract-zip');
 const parse = require('csv-parse');
-const mongoose = require('mongoose');
 const should = require('should');
 
-const config = require('../config.json');
+const { openDb } = require('../../lib/db');
 const gtfs = require('../..');
 const models = require('../../models/models');
 
-const agenciesFixturesUrl = [{
+const config = {
+  agencies: [{
+    agency_key: 'caltrain',
+    path: path.join(__dirname, '../fixture/caltrain_20160406.zip')
+  }],
+  verbose: false
+};
+
+let db;
+
+const agenciesFixturesRemote = [{
   agency_key: 'caltrain',
-  url: 'http://transitfeeds.com/p/caltrain/122/20160406/download'
+  path: path.join(__dirname, '../fixture/caltrain_20160406.zip')
 }];
 
 const agenciesFixturesLocal = [{
@@ -25,24 +33,21 @@ const agenciesFixturesLocal = [{
 
 describe('lib/import.js', function () {
   before(async () => {
-    await mongoose.connect(config.mongoUrl, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
+    db = await openDb(config);
   });
 
   after(async () => {
-    await mongoose.connection.db.dropDatabase();
-    await mongoose.connection.close();
+    await db.close();
   });
 
   this.timeout(10000);
   describe('Download and import from different GTFS sources', () => {
     it('should be able to download and import from HTTP', async () => {
-      await mongoose.connection.db.dropDatabase();
-      config.agencies = agenciesFixturesUrl;
+      config.agencies = agenciesFixturesRemote;
       await gtfs.import(config);
     });
 
     it('should be able to download and import from local filesystem', async () => {
-      await mongoose.connection.db.dropDatabase();
       config.agencies = agenciesFixturesLocal;
       await gtfs.import(config);
     });
@@ -86,17 +91,13 @@ describe('lib/import.js', function () {
           });
       }));
 
-      await mongoose.connection.db.dropDatabase();
       await gtfs.import(config);
     });
 
     for (const model of models) {
-      it(`should import the same number of ${model.filenameBase}`, done => {
-        model.model.collection.estimatedDocumentCount({}, (err, result) => {
-          should.not.exist(err);
-          result.should.equal(countData[model.filenameBase]);
-          done();
-        });
+      it(`should import the same number of ${model.filenameBase}`, async () => {
+        const result = await db.get(`SELECT COUNT(*) FROM ${model.filenameBase};`);
+        result['COUNT(*)'].should.equal(countData[model.filenameBase]);
       });
     }
   });

@@ -45,6 +45,6 @@ module.exports = {
       name: 'route_sort_order',
       type: 'integer',
       min: 0
-    },
+    }
   ]
 };

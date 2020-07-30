@@ -17,7 +17,7 @@ const gtfs = require('..');
 const handleError = err => {
   const text = err || 'Unknown Error';
   process.stdout.write(`\n${logUtils.formatError(text)}\n`);
-  console.error(err)
+  console.error(err);
   process.exit(1);
 };
 

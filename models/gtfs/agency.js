@@ -42,4 +42,4 @@ module.exports = {
       type: 'varchar(255)'
     }
   ]
-}
+};

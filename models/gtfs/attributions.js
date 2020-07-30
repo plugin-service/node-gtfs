@@ -52,6 +52,6 @@ module.exports = {
     {
       name: 'attribution_phone',
       type: 'varchar(255)'
-    },
+    }
   ]
 };

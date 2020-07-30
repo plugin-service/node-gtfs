@@ -28,7 +28,7 @@ module.exports = {
       type: 'integer',
       required: true,
       min: 0,
-      max: 1  
+      max: 1
     },
     {
       name: 'length',

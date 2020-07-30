@@ -12,7 +12,7 @@ const config = {
     path: path.join(__dirname, '../fixture/caltrain_20160406.zip')
   }],
   verbose: false
-}
+};
 
 let db;
 
@@ -33,7 +33,7 @@ describe('gtfs.getCalendarDates():', () => {
       service_id: serviceId
     });
     should.exists(results);
-    results.should.have.length(0);;
+    results.should.have.length(0);
   });
 
   it('should return expected calendar dates', async () => {
@@ -92,9 +92,8 @@ describe('gtfs.getCalendarDates():', () => {
       'date'
     ], [
       ['date', 'ASC'],
-      ['service_id', 'ASC'],
+      ['service_id', 'ASC']
     ]);
-
 
     const expectedResults = [
       {
