@@ -35,10 +35,19 @@ describe('gtfs.getShapes():', () => {
   });
 
   it('should return array of shapes', async () => {
-    const results = await gtfs.getShapes(config);
+    const results = await gtfs.getShapes(
+      config,
+      {},
+      [
+        'shape_id',
+        'shape_pt_lat',
+        'shape_pt_lon',
+        'shape_pt_sequence',
+        'shape_dist_traveled'
+      ]
+    );
 
     const expectedResult = {
-      id: 1814,
       shape_id: 'cal_tam_sf',
       shape_pt_lat: 37.60768711349564,
       shape_pt_lon: -122.39467978477478,
@@ -53,12 +62,21 @@ describe('gtfs.getShapes():', () => {
 
   it('should return array of shapes by route', async () => {
     const routeId = 'TaSj-16APR';
-    const results = await gtfs.getShapes(config, {
-      route_id: routeId
-    });
+    const results = await gtfs.getShapes(
+      config,
+      {
+        route_id: routeId
+      },
+      [
+        'shape_id',
+        'shape_pt_lat',
+        'shape_pt_lon',
+        'shape_pt_sequence',
+        'shape_dist_traveled'
+      ]
+    );
 
     const expectedResult = {
-      id: 2663,
       shape_id: 'cal_tam_sj',
       shape_pt_lat: 37.323558,
       shape_pt_lon: -121.8919,
@@ -73,12 +91,21 @@ describe('gtfs.getShapes():', () => {
 
   it('should return array of shapes for specific trip_id', async () => {
     const tripId = '329';
-    const results = await gtfs.getShapes(config, {
-      trip_id: tripId
-    });
+    const results = await gtfs.getShapes(
+      config,
+      {
+        trip_id: tripId
+      },
+      [
+        'shape_id',
+        'shape_pt_lat',
+        'shape_pt_lon',
+        'shape_pt_sequence',
+        'shape_dist_traveled'
+      ]
+    );
 
     const expectedResult = {
-      id: 1473,
       shape_id: 'cal_tam_sf',
       shape_pt_lat: 37.337664044379544,
       shape_pt_lon: -121.90810561180115,
@@ -93,12 +120,21 @@ describe('gtfs.getShapes():', () => {
 
   it('should return array of shapes for specific service_id', async () => {
     const serviceId = 'CT-16APR-Caltrain-Sunday-02';
-    const results = await gtfs.getShapes({
-      service_id: serviceId
-    });
+    const results = await gtfs.getShapes(
+      config,
+      {
+        service_id: serviceId
+      },
+      [
+        'shape_id',
+        'shape_pt_lat',
+        'shape_pt_lon',
+        'shape_pt_sequence',
+        'shape_dist_traveled'
+      ]
+    );
 
     const expectedResult = {
-      id: 3004,
       shape_id: 'cal_sj_tam',
       shape_pt_lat: 37.294079,
       shape_pt_lon: -121.874108,
@@ -107,7 +143,7 @@ describe('gtfs.getShapes():', () => {
     };
 
     should.exist(results);
-    results.length.should.equal(3008);
+    results.length.should.equal(713);
     results.should.containEql(expectedResult);
   });
 });

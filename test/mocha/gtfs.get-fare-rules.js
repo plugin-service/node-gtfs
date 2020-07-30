@@ -39,15 +39,18 @@ describe('gtfs.getFareRules():', () => {
 
     const results = await gtfs.getFareRules(config, {
       route_id: routeId
-    });
+    }, [
+      'fare_id',
+      'route_id',
+      'origin_id',
+      'destination_id'
+    ]);
 
     const expectedResult = {
-      id: 36,
       fare_id: 'OW_2_20160228',
       route_id: 'Bu-16APR',
       origin_id: '6',
-      destination_id: '5',
-      contains_id: null
+      destination_id: '5'
     };
 
     should.exist(results);

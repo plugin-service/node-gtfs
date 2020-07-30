@@ -147,7 +147,6 @@ API along with your API token.
 For instance, if you wanted to skip importing invalid lines in the GTFS file:
 
 ```
-
     "csvOptions": {
       "skip_lines_with_error": true
     }
@@ -160,7 +159,6 @@ See [full list of options](https://csv.js.org/parse/options/).
 {String} A path to an SQLite database. Optional, defaults to using an in-memory database.
 
 ```
-
     "sqlitePath": "/dev/sqlite/gtfs"
 ```
 
