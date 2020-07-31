@@ -129,6 +129,37 @@ describe('gtfs.getStops():', () => {
     });
   });
 
+  it('should return array of stops if it exists for a specific route_id and direction_id', async () => {
+    const routeId = 'Bu-16APR';
+    const directionId = 1;
+
+    const results = await gtfs.getStops(config, {
+      route_id: routeId,
+      direction_id: directionId
+    });
+
+    const expectedStopIds = [
+      '70262',
+      '70222',
+      '70212',
+      '70172',
+      '70142',
+      '70112',
+      '70092',
+      '70062',
+      '70012',
+      '70022',
+      '70162',
+      '70272'
+    ];
+
+    should.exist(results);
+    results.length.should.equal(12);
+    results.forEach((stop, idx) => {
+      expectedStopIds[idx].should.equal(stop.stop_id, 'The order of stops are expected to be the same');
+    });
+  });
+
   it('should return array of stops for a specific trip_id', async () => {
     const tripId = '427a';
 
