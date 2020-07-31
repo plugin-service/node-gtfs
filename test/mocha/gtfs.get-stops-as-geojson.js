@@ -41,6 +41,8 @@ describe('gtfs.getStopsAsGeoJSON(): ', () => {
     should.exist(geojson);
     geojson.type.should.equal('FeatureCollection');
     geojson.features.length.should.be.above(1);
+    should.exist(geojson.features[0].geometry.coordinates);
+    geojson.features[0].geometry.coordinates.length.should.equal(2);
   });
 
   it('should return geojson with stops if they exist for a specific stopId', async () => {
@@ -53,5 +55,7 @@ describe('gtfs.getStopsAsGeoJSON(): ', () => {
     should.exist(geojson);
     geojson.type.should.equal('FeatureCollection');
     geojson.features.length.should.equal(1);
+    should.exist(geojson.features[0].geometry.coordinates);
+    geojson.features[0].geometry.coordinates.length.should.equal(2);
   });
 });
