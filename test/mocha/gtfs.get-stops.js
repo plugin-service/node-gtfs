@@ -93,7 +93,11 @@ describe('gtfs.getStops():', () => {
 
     const results = await gtfs.getStops(config, {
       route_id: routeId
-    });
+    },
+    [],
+    [
+      ['stop_id', 'ASC']
+    ]);
 
     const expectedStopIds = [
       '70011',
@@ -136,20 +140,24 @@ describe('gtfs.getStops():', () => {
     const results = await gtfs.getStops(config, {
       route_id: routeId,
       direction_id: directionId
-    });
+    },
+    [],
+    [
+      ['stop_id', 'ASC']
+    ]);
 
     const expectedStopIds = [
-      '70262',
-      '70222',
-      '70212',
-      '70172',
-      '70142',
-      '70112',
-      '70092',
-      '70062',
       '70012',
       '70022',
+      '70062',
+      '70092',
+      '70112',
+      '70142',
       '70162',
+      '70172',
+      '70212',
+      '70222',
+      '70262',
       '70272'
     ];
 
@@ -165,7 +173,11 @@ describe('gtfs.getStops():', () => {
 
     const results = await gtfs.getStops(config, {
       trip_id: tripId
-    });
+    },
+    [],
+    [
+      ['stop_id', 'ASC']
+    ]);
 
     const expectedStopIds = [
       '70011',
