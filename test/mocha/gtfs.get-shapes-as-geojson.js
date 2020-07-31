@@ -54,7 +54,23 @@ describe('gtfs.getShapesAsGeoJSON():', () => {
 
     should.exist(geojson);
     geojson.type.should.equal('FeatureCollection');
-    geojson.features.length.should.be.above(1);
+    geojson.features.length.should.equal(3);
+    should.exist(geojson.features[0].geometry.coordinates);
+    geojson.features[0].geometry.coordinates[0].length.should.equal(2);
+  });
+
+  it('should return geojson with shapes for a specific routeId and directionId', async () => {
+    const routeId = 'Lo-16APR';
+    const directionId = 0;
+
+    const geojson = await gtfs.getShapesAsGeoJSON(config, {
+      route_id: routeId,
+      direction_id: directionId
+    });
+
+    should.exist(geojson);
+    geojson.type.should.equal('FeatureCollection');
+    geojson.features.length.should.equal(2);
     should.exist(geojson.features[0].geometry.coordinates);
     geojson.features[0].geometry.coordinates[0].length.should.equal(2);
   });

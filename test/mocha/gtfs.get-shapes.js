@@ -34,6 +34,18 @@ describe('gtfs.getShapes():', () => {
     results.should.have.length(0);
   });
 
+  it('should return an empty array if no matching trips exist', async () => {
+    const routeId = 'TaSj-16APR';
+    const serviceId = 'fake-service-id';
+
+    const results = await gtfs.getShapes(config, {
+      route_id: routeId,
+      service_id: serviceId
+    });
+    should.exists(results);
+    results.should.have.length(0);
+  });
+
   it('should return array of shapes', async () => {
     const results = await gtfs.getShapes(
       config,
@@ -86,6 +98,37 @@ describe('gtfs.getShapes():', () => {
 
     should.exist(results);
     results.length.should.equal(331);
+    results.should.containEql(expectedResult);
+  });
+
+  it('should return array of shapes by route and direction', async () => {
+    const routeId = 'TaSj-16APR';
+    const directionId = 0;
+    const results = await gtfs.getShapes(
+      config,
+      {
+        route_id: routeId,
+        direction_id: directionId
+      },
+      [
+        'shape_id',
+        'shape_pt_lat',
+        'shape_pt_lon',
+        'shape_pt_sequence',
+        'shape_dist_traveled'
+      ]
+    );
+
+    const expectedResult = {
+      shape_id: 'cal_tam_sj',
+      shape_pt_lat: 37.323558,
+      shape_pt_lon: -121.8919,
+      shape_pt_sequence: 10051,
+      shape_dist_traveled: null
+    };
+
+    should.exist(results);
+    results.length.should.equal(114);
     results.should.containEql(expectedResult);
   });
 
