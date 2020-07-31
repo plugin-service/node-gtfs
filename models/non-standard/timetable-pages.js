@@ -1,5 +1,5 @@
 module.exports = {
-  filenameBase: 'timetable_page',
+  filenameBase: 'timetable_pages',
   schema: [
     {
       name: 'timetable_page_id',
