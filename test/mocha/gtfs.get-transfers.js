@@ -27,7 +27,7 @@ describe('gtfs.getTransfers():', () => {
   it('should return empty array if no transfers', async () => {
     const fromStopId = 'fake-stop-id';
 
-    const results = await gtfs.getTransfers(config, {
+    const results = await gtfs.getTransfers({
       from_stop_id: fromStopId
     });
     should.exists(results);

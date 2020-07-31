@@ -26,7 +26,7 @@ describe('gtfs.getAgencies():', () => {
 
   it('should return empty array if no agencies exist', async () => {
     const agencyId = 'fake-agency-id';
-    const results = await gtfs.getAgencies(config, {
+    const results = await gtfs.getAgencies({
       agency_id: agencyId
     });
     should.exists(results);
@@ -34,7 +34,7 @@ describe('gtfs.getAgencies():', () => {
   });
 
   it('should return expected agencies with no query', async () => {
-    const results = await gtfs.getAgencies(config);
+    const results = await gtfs.getAgencies();
 
     const expectedResult = {
       id: 1,
@@ -57,7 +57,7 @@ describe('gtfs.getAgencies():', () => {
     const agencyId = 'CT';
     const agencyLand = 'en';
 
-    const results = await gtfs.getAgencies(config, {
+    const results = await gtfs.getAgencies({
       agency_id: agencyId,
       agency_lang: agencyLand
     });
@@ -82,7 +82,7 @@ describe('gtfs.getAgencies():', () => {
   it('should return only specific keys for expected agency for agency_id', async () => {
     const agencyId = 'CT';
 
-    const results = await gtfs.getAgencies(config, {
+    const results = await gtfs.getAgencies({
       agency_id: agencyId
     }, [
       'agency_url',

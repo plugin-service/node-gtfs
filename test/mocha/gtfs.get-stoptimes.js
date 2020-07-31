@@ -27,7 +27,7 @@ describe('gtfs.getStoptimes():', () => {
   it('should return an empty array if no stoptimes exist for given agency', async () => {
     const stopId = 'fake-stop-id';
 
-    const results = await gtfs.getStoptimes(config, {
+    const results = await gtfs.getStoptimes({
       stop_id: stopId
     });
     should.exists(results);
@@ -37,7 +37,7 @@ describe('gtfs.getStoptimes():', () => {
   it('should return array of stoptimes for given stop_id', async () => {
     const stopId = '70011';
 
-    const results = await gtfs.getStoptimes(config, {
+    const results = await gtfs.getStoptimes({
       stop_id: stopId
     });
     should.exist(results);
@@ -51,7 +51,7 @@ describe('gtfs.getStoptimes():', () => {
   it('should return array of stoptimes for given trip_id ordered by stop_sequence', async () => {
     const tripId = '421a';
 
-    const results = await gtfs.getStoptimes(config, {
+    const results = await gtfs.getStoptimes({
       trip_id: tripId
     }, [], [
       ['stop_sequence', 'ASC']

@@ -27,7 +27,7 @@ describe('gtfs.getShapes():', () => {
   it('should return an empty array if no shapes exist', async () => {
     const shapeId = 'fake-shape-id';
 
-    const results = await gtfs.getShapes(config, {
+    const results = await gtfs.getShapes({
       shape_id: shapeId
     });
     should.exists(results);
@@ -38,7 +38,7 @@ describe('gtfs.getShapes():', () => {
     const routeId = 'TaSj-16APR';
     const serviceId = 'fake-service-id';
 
-    const results = await gtfs.getShapes(config, {
+    const results = await gtfs.getShapes({
       route_id: routeId,
       service_id: serviceId
     });
@@ -48,7 +48,6 @@ describe('gtfs.getShapes():', () => {
 
   it('should return array of shapes', async () => {
     const results = await gtfs.getShapes(
-      config,
       {},
       [
         'shape_id',
@@ -75,7 +74,6 @@ describe('gtfs.getShapes():', () => {
   it('should return array of shapes by route', async () => {
     const routeId = 'TaSj-16APR';
     const results = await gtfs.getShapes(
-      config,
       {
         route_id: routeId
       },
@@ -105,7 +103,6 @@ describe('gtfs.getShapes():', () => {
     const routeId = 'TaSj-16APR';
     const directionId = 0;
     const results = await gtfs.getShapes(
-      config,
       {
         route_id: routeId,
         direction_id: directionId
@@ -135,7 +132,6 @@ describe('gtfs.getShapes():', () => {
   it('should return array of shapes for specific trip_id', async () => {
     const tripId = '329';
     const results = await gtfs.getShapes(
-      config,
       {
         trip_id: tripId
       },
@@ -164,7 +160,6 @@ describe('gtfs.getShapes():', () => {
   it('should return array of shapes for specific service_id', async () => {
     const serviceId = 'CT-16APR-Caltrain-Sunday-02';
     const results = await gtfs.getShapes(
-      config,
       {
         service_id: serviceId
       },

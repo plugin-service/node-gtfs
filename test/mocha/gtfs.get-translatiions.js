@@ -27,7 +27,7 @@ describe('gtfs.getTranslations():', () => {
   it('should return empty array if no translations', async () => {
     const fieldName = 'fake-field-name';
 
-    const results = await gtfs.getTranslations(config, {
+    const results = await gtfs.getTranslations({
       field_name: fieldName
     });
     should.exists(results);

@@ -27,7 +27,7 @@ describe('gtfs.getFareRules():', () => {
   it('should return empty array if no fare_rules', async () => {
     const routeId = 'not_real';
 
-    const results = await gtfs.getFareRules(config, {
+    const results = await gtfs.getFareRules({
       route_id: routeId
     });
     should.exists(results);
@@ -37,7 +37,7 @@ describe('gtfs.getFareRules():', () => {
   it('should return expected fare_rules', async () => {
     const routeId = 'Bu-16APR';
 
-    const results = await gtfs.getFareRules(config, {
+    const results = await gtfs.getFareRules({
       route_id: routeId
     }, [
       'fare_id',

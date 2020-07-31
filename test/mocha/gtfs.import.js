@@ -46,7 +46,7 @@ describe('lib/import.js', function () {
       config.agencies = agenciesFixturesRemote;
       await gtfs.import(config);
 
-      const routes = await gtfs.getRoutes(config);
+      const routes = await gtfs.getRoutes();
       should.exist(routes);
       routes.length.should.equal(4);
     });
@@ -55,7 +55,7 @@ describe('lib/import.js', function () {
       config.agencies = agenciesFixturesLocal;
       await gtfs.import(config);
 
-      const routes = await gtfs.getRoutes(config);
+      const routes = await gtfs.getRoutes();
       should.exist(routes);
       routes.length.should.equal(4);
     });

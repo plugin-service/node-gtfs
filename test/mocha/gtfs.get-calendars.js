@@ -27,7 +27,7 @@ describe('gtfs.getCalendars():', () => {
   it('should return empty array if no calendars', async () => {
     const serviceId = 'fake-service-id';
 
-    const results = await gtfs.getCalendars(config, {
+    const results = await gtfs.getCalendars({
       service_id: serviceId
     });
     should.exists(results);
@@ -35,7 +35,7 @@ describe('gtfs.getCalendars():', () => {
   });
 
   it('should return expected calendars', async () => {
-    const results = await gtfs.getCalendars(config, {
+    const results = await gtfs.getCalendars({
       sunday: 1
     });
 

@@ -27,7 +27,7 @@ describe('gtfs.getTrips():', () => {
   it('should return empty array if no trips exist', async () => {
     const tripId = 'fake-trip-id';
 
-    const results = await gtfs.getTrips(config, {
+    const results = await gtfs.getTrips({
       trip_id: tripId
     });
     should.exists(results);
@@ -37,7 +37,7 @@ describe('gtfs.getTrips():', () => {
   it('should return expected trips', async () => {
     const routeId = 'Bu-16APR';
 
-    const results = await gtfs.getTrips(config, {
+    const results = await gtfs.getTrips({
       route_id: routeId
     });
 

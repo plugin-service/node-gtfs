@@ -27,7 +27,7 @@ describe('gtfs.getTimetablePages():', () => {
   it('should return empty array if no timetable pages', async () => {
     const timetablePageId = 'fake-timetable-page-id';
 
-    const results = await gtfs.getTimetablePages(config, {
+    const results = await gtfs.getTimetablePages({
       timetable_page_id: timetablePageId
     });
     should.exists(results);

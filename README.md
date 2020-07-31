@@ -311,14 +311,14 @@ Use `gtfs.export()` in your code to run an export of a GTFS file specified in a 
 
 This library includes many methods you can use in your project to query GTFS data. These methods return promises.
 
-Most methods accept four arguments: `config`, `query`, `fields` and `sortBy`. Only `config` is required.
+Most methods accept three optional arguments: `query`, `fields` and `sortBy`.
 
 #### Query
 
 For example, to get a list of all routes with just `route_id`, `route_short_name` and `route_color` sorted by `route_short_name`:
 
+    const db = await gtfs.openDb(config);
     const routes = await gtfs.getRoutes(
-      config, 
       {},
       [
         'route_id',
@@ -336,24 +336,40 @@ Include this library.
 
     const gtfs = require('gtfs');
 
-### gtfs.getAgencies(config, query, fields, sortBy)
+Open database before making any queries
+
+    const db = await gtfs.openDb(config);
+
+### gtfs.getAgencies(query, fields, sortBy)
 
 Queries agencies and returns a promise. The result of the promise is an array of agencies.
 
     // Get all agencies
-    gtfs.getAgencies(config);
+    gtfs.getAgencies();
 
     // Get a specific agency
-    gtfs.getAgencies(config, {
+    gtfs.getAgencies({
       agency_id: 'caltrain'
     });
 
-### gtfs.getRoutes(config, query, fields, sortBy)
+### gtfs.getAttributions(query, fields, sortBy)
+
+Queries attributions and returns a promise. The result of the promise is an array of attributions.
+
+    // Get all attributions
+    gtfs.getAttributions();
+
+    // Get a specific attribution
+    gtfs.getAttributions({
+      attribution_id: '123'
+    });
+
+### gtfs.getRoutes(query, fields, sortBy)
 
 Queries routes and returns a promise. The result of the promise is an array of routes.
 
     // Get all routes, sorted by route_short_name
-    gtfs.getRoutes(config,
+    gtfs.getRoutes(
       {},
       [],
       [
@@ -362,14 +378,14 @@ Queries routes and returns a promise. The result of the promise is an array of r
     );
 
     // Get a specific route
-    gtfs.getRoutes(config, {
+    gtfs.getRoutes({
       route_id: 'Lo-16APR'
     });
 
 `getRoutes` allows passing a `stop_id` in the query and it will query stoptimes and trips to find all routes that serve that `stop_id`.
 
     // Get routes that serve a specific stop, sorted by `stop_name`.
-    gtfs.getRoutes(config,
+    gtfs.getRoutes(
       {
         stop_id: '70011'
       },
@@ -379,65 +395,58 @@ Queries routes and returns a promise. The result of the promise is an array of r
       ]
     );
 
-### gtfs.getStops(config, query, fields, sortBy)
+### gtfs.getStops(query, fields, sortBy)
 
 Queries stops and returns a promise. The result of the promise is an array of stops.
 
     // Get all stops
-    gtfs.getStops(config);
+    gtfs.getStops();
 
     // Get a specific stop by stop_id
-    gtfs.getStops(config, {
+    gtfs.getStops({
       stop_id: '70011'
     });
 
 `getStops` allows passing a `route_id` in the query and it will query trips and stoptimes to find all stops served by that `route_id`.
 
     // Get all stops for a specific route
-    gtfs.getStops(
-      config,
-      {
-        route_id: 'Lo-16APR'
-      }
-    );
+    gtfs.getStops({
+      route_id: 'Lo-16APR'
+    });
 
 `getStops` allows passing a `trip_id` in the query and it will query stoptimes to find all stops on that `trip_id`.
 
     // Get all stops for a specific trip
-    gtfs.getStops(
-      config,
-      {
-        trip_id: '37a'
-      }
-    );
+    gtfs.getStops({
+      trip_id: '37a'
+    });
 
-### gtfs.getStopsAsGeoJSON(config, query)
+### gtfs.getStopsAsGeoJSON(query)
 
 Queries stops and returns a promise. The result of the promise is an geoJSON object of stops. All valid queries for `gtfs.getStops()` work for `gtfs.getStopsAsGeoJSON()`.
 
     // Get all stops for an agency as geoJSON
-    gtfs.getStopsAsGeoJSON(config);
+    gtfs.getStopsAsGeoJSON();
 
     // Get all stops for a specific route as geoJSON
-    gtfs.getStopsAsGeoJSON(config, {
+    gtfs.getStopsAsGeoJSON({
       route_id: 'Lo-16APR'
     });
 
-### gtfs.getStoptimes(config, query, fields, sortBy)
+### gtfs.getStoptimes(query, fields, sortBy)
 
 Queries `stop_times` and returns a promise. The result of the promise is an array of `stop_times`.
 
     // Get all stoptimes
-    gtfs.getStoptimes(config);
+    gtfs.getStoptimes();
 
     // Get all stoptimes for a specific stop
-    gtfs.getStoptimes(config, {
+    gtfs.getStoptimes({
       stop_id: '70011'
     });
 
     // Get all stoptimes for a specific trip, sorted by stop_sequence
     gtfs.getStoptimes(
-      config,
       {
         trip_id: '37a'
       },
@@ -448,216 +457,216 @@ Queries `stop_times` and returns a promise. The result of the promise is an arra
     );
 
     // Get all stoptimes for a specific stop and service_id
-    gtfs.getStoptimes(config, {
+    gtfs.getStoptimes({
       stop_id: '70011',
       service_id: 'CT-16APR-Caltrain-Weekday-01'
     });
 
-### gtfs.getTrips(config, query, fields, sortBy)
+### gtfs.getTrips(query, fields, sortBy)
 
 Queries trips and returns a promise. The result of the promise is an array of trips.
 
     // Get all trips
-    gtfs.getTrips(config);
+    gtfs.getTrips();
 
     // Get trips for a specific route and direction
-    gtfs.getTrips(config, {
+    gtfs.getTrips({
       route_id: 'Lo-16APR',
       direction_id: 0
     });
 
     // Get trips for a specific route and direction limited by a service_id
-    gtfs.getTrips(config, {
+    gtfs.getTrips({
       route_id: 'Lo-16APR',
       direction_id: 0,
       service_id: '
     });
 
-### gtfs.getShapes(config, query, fields, sortBy)
+### gtfs.getShapes(query, fields, sortBy)
 
 Queries shapes and returns a promise. The result of the promise is an array of shapes.
 
     // Get all shapes for an agency
-    gtfs.getShapes(config);
+    gtfs.getShapes();
 
 `getShapes` allows passing a `route_id` in the query and it will query trips to find all shapes served by that `route_id`.
   
     // Get all shapes for a specific route and direction
-    gtfs.getShapes(config, {
+    gtfs.getShapes({
       route_id: 'Lo-16APR',
     });
 
 `getShapes` allows passing a `trip_id` in the query and it will query trips to find all shapes served by that `trip_id`.
 
     // Get all shapes for a specific trip_id
-    gtfs.getShapes(config, {
+    gtfs.getShapes({
       trip_id: '37a'
     });
 
 `getShapes` allows passing a `service_id` in the query and it will query trips to find all shapes served by that `service_id`.
 
     // Get all shapes for a specific service_id
-    gtfs.getShapes(config, {
+    gtfs.getShapes({
       service_id: 'CT-16APR-Caltrain-Sunday-02'
     });
 
-### gtfs.getShapesAsGeoJSON(config, query)
+### gtfs.getShapesAsGeoJSON(query)
 
 Queries shapes and returns a promise. The result of the promise is an geoJSON object of shapes. All valid queries for `gtfs.getShapes()` work for `gtfs.getShapesAsGeoJSON()`.
 
 Returns geoJSON of shapes.
 
     // Get geoJSON of all stops in an agency
-    gtfs.getShapesAsGeoJSON(config);
+    gtfs.getShapesAsGeoJSON();
 
     // Get geoJSON of stops along a specific route
-    gtfs.getShapesAsGeoJSON(config, {
+    gtfs.getShapesAsGeoJSON({
       route_id: 'Lo-16APR'
     });
 
     // Get geoJSON of stops for a specific trip
-    gtfs.getShapesAsGeoJSON(config, {
+    gtfs.getShapesAsGeoJSON({
       trip_id: '37a'
     });
 
     // Get geoJSON of stops for a specific `service_id`
-    gtfs.getShapesAsGeoJSON(config, {
+    gtfs.getShapesAsGeoJSON({
       service_id: 'CT-16APR-Caltrain-Sunday-02'
     });
 
-### gtfs.getCalendars(config, query, fields, sortBy)
+### gtfs.getCalendars(query, fields, sortBy)
 
 Queries calendars and returns a promise. The result of the promise is an array of calendars.
 
     // Get all calendars for an agency
-    gtfs.getCalendars(config);
+    gtfs.getCalendars();
 
     // Get calendars for a specific `service_id`
-    gtfs.getCalendars(config, {
+    gtfs.getCalendars({
       service_id: 'CT-16APR-Caltrain-Sunday-02'
     });
 
-### gtfs.getCalendarDates(config, query, fields, sortBy)
+### gtfs.getCalendarDates(query, fields, sortBy)
 
 Queries calendar_dates and returns a promise. The result of the promise is an array of calendar_dates.
 
     // Get all calendar_dates for an agency
-    gtfs.getCalendarDates(config);
+    gtfs.getCalendarDates();
 
     // Get calendar_dates for a specific `service_id`
-    gtfs.getCalendarDates(config, {
+    gtfs.getCalendarDates({
       service_id: 'CT-16APR-Caltrain-Sunday-02'
     });
 
-### gtfs.getFareRules(config, query, fields, sortBy)
+### gtfs.getFareRules(query, fields, sortBy)
 
 Queries fare_rules and returns a promise. The result of the promise is an array of fare_rules.
 
     // Get all `fare_rules` for an agency
-    gtfs.getFareRules(config);
+    gtfs.getFareRules();
 
     // Get fare_rules for a specific route
-    gtfs.getFareRules(config, {
+    gtfs.getFareRules({
       route_id: 'Lo-16APR'
     });
 
-### gtfs.getFeedInfo(config, query, fields, sortBy)
+### gtfs.getFeedInfo(query, fields, sortBy)
 
 Queries feed_info and returns a promise. The result of the promise is an array of feed_infos.
 
     // Get feed_info
-    gtfs.getFeedInfo(config);
+    gtfs.getFeedInfo();
 
-### gtfs.getFrequencies(config, query, fields, sortBy)
+### gtfs.getFrequencies(query, fields, sortBy)
 
 Queries frequencies and returns a promise. The result of the promise is an array of frequencies.
 
     // Get all frequencies
-    gtfs.getFrequencies(config);
+    gtfs.getFrequencies();
 
     // Get frequencies for a specific trip
-    gtfs.getFrequencies(config, {
+    gtfs.getFrequencies({
       trip_id: '1234'
     });
 
-### gtfs.getLevels(config, query, fields, sortBy)
+### gtfs.getLevels(query, fields, sortBy)
 
 Queries levels and returns a promise. The result of the promise is an array of levels.
 
     // Get levels
-    gtfs.getLevels(config);
+    gtfs.getLevels();
 
-### gtfs.getPathways(config, query, fields, sortBy)
+### gtfs.getPathways(query, fields, sortBy)
 
 Queries pathways and returns a promise. The result of the promise is an array of pathways.
 
     // Get pathways
-    gtfs.getPathways(config);
+    gtfs.getPathways();
 
-### gtfs.getTransfers(config, query, fields, sortBy)
+### gtfs.getTransfers(query, fields, sortBy)
 
 Queries transfers and returns a promise. The result of the promise is an array of transfers.
 
     // Get all transfers
-    gtfs.getTransfers(config);
+    gtfs.getTransfers();
 
     // Get transfers for a specific stop
-    gtfs.getTransfers(config, {
+    gtfs.getTransfers({
       from_stop_id: '1234'
     });
 
-### gtfs.getTranslations(config, query, fields, sortBy)
+### gtfs.getTranslations(query, fields, sortBy)
 
 Queries translations and returns a promise. The result of the promise is an array of translations.
 
     // Get translations
-    gtfs.getTranslations(config);
+    gtfs.getTranslations();
 
-### gtfs.getStopAttributes(config, query, fields, sortBy)
+### gtfs.getStopAttributes(query, fields, sortBy)
 
 Queries stop_attributes and returns a promise. The result of the promise is an array of stop_attributes. These are from the non-standard `stop_attributes.txt` file. See [documentation and examples of this file](https://gtfstohtml.com/docs/stop-attributes).
 
     // Get all stop attributes
-    gtfs.getStopAttributes(config);
+    gtfs.getStopAttributes();
 
     // Get stop attributes for specific stop
-    gtfs.getStopAttributes(config, {
+    gtfs.getStopAttributes({
       stop_id: '1234'
     });
 
-### gtfs.getTimetables(config, query, fields, sortBy)
+### gtfs.getTimetables(query, fields, sortBy)
 
 Queries timetables and returns a promise. The result of the promise is an array of timetables. These are from the non-standard `timetables.txt` file. See [documentation and examples of this file](https://gtfstohtml.com/docs/timetables.
 
     // Get all timetables for an agency
-    gtfs.getTimetables(config);
+    gtfs.getTimetables();
 
     // Get a specific timetable
-    gtfs.getTimetables(config, {
+    gtfs.getTimetables({
       timetable_id: '1'
     });
 
-### gtfs.getTimetableStopOrders(config, query, fields, sortBy)
+### gtfs.getTimetableStopOrders(query, fields, sortBy)
 
 Queries timetable_stop_orders and returns a promise. The result of the promise is an array of timetable_stop_orders. These are from the non-standard `timetable_stop_order.txt` file. See [documentation and examples of this file](https://gtfstohtml.com/docs/timetable-stop-order).
 
     // Get all timetable_stop_orders
-    gtfs.getTimetableStopOrders(config);
+    gtfs.getTimetableStopOrders();
 
     // Get timetable_stop_orders for a specific timetable
-    gtfs.getTimetableStopOrders(config, {
+    gtfs.getTimetableStopOrders({
       timetable_id: '1'
     });
 
-### gtfs.getTimetablePages(config, query, fields, sortBy)
+### gtfs.getTimetablePages(query, fields, sortBy)
 
 Queries timetable_pages and returns a promise. The result of the promise is an array of timetable_pages. These are from the non-standard `timetable_pages.txt` file. See [documentation and examples of this file](https://gtfstohtml.com/docs/timetable-pages).
 
     // Get all timetable_pages for an agency
-    gtfs.getTimetablePages(config);
+    gtfs.getTimetablePages();
 
     // Get a specific timetable_page
-    gtfs.getTimetablePages(config, {
+    gtfs.getTimetablePages({
       timetable_page_id: '2'
     });
 

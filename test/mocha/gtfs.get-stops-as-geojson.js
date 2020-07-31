@@ -26,7 +26,7 @@ describe('gtfs.getStopsAsGeoJSON(): ', () => {
 
   it('should return geojson with an empty features array if no stops exist', async () => {
     const stopId = 'fake-stop-id';
-    const geojson = await gtfs.getStopsAsGeoJSON(config, {
+    const geojson = await gtfs.getStopsAsGeoJSON({
       stop_id: stopId
     });
 
@@ -36,7 +36,7 @@ describe('gtfs.getStopsAsGeoJSON(): ', () => {
   });
 
   it('should return geojson with stops if they exist', async () => {
-    const geojson = await gtfs.getStopsAsGeoJSON(config);
+    const geojson = await gtfs.getStopsAsGeoJSON();
 
     should.exist(geojson);
     geojson.type.should.equal('FeatureCollection');
@@ -48,7 +48,7 @@ describe('gtfs.getStopsAsGeoJSON(): ', () => {
   it('should return geojson with stops if they exist for a specific stopId', async () => {
     const stopId = '70031';
 
-    const geojson = await gtfs.getStopsAsGeoJSON(config, {
+    const geojson = await gtfs.getStopsAsGeoJSON({
       stop_id: stopId
     });
 

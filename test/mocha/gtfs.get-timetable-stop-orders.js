@@ -27,7 +27,7 @@ describe('gtfs.getTimetableStopOrders():', () => {
   it('should return empty array if no timetable stop orders', async () => {
     const timetableId = 'fake-timetable-id';
 
-    const results = await gtfs.getTimetableStopOrders(config, {
+    const results = await gtfs.getTimetableStopOrders({
       timetable_id: timetableId
     });
     should.exists(results);

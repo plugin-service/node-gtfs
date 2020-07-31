@@ -27,7 +27,7 @@ describe('gtfs.getPathways():', () => {
   it('should return empty array if no pathways', async () => {
     const pathwayId = 'not_real';
 
-    const results = await gtfs.getPathways(config, {
+    const results = await gtfs.getPathways({
       pathway_id: pathwayId
     });
     should.exists(results);

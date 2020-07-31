@@ -27,7 +27,7 @@ describe('gtfs.getFrequencies():', () => {
   it('should return empty array if no frequencies', async () => {
     const tripId = 'not_real';
 
-    const results = await gtfs.getFrequencies(config, {
+    const results = await gtfs.getFrequencies({
       trip_id: tripId
     });
     should.exists(results);

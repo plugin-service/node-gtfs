@@ -14,7 +14,7 @@ const config = {
   verbose: false
 };
 
-describe('gtfs.getLevels():', () => {
+describe('gtfs.getAttributions():', () => {
   before(async () => {
     await openDb(config);
     await gtfs.import(config);
@@ -24,11 +24,10 @@ describe('gtfs.getLevels():', () => {
     await closeDb();
   });
 
-  it('should return empty array if no levels', async () => {
-    const levelId = 'not_real';
-
-    const results = await gtfs.getLevels({
-      level_id: levelId
+  it('should return empty array if no attributions exist', async () => {
+    const attributionId = 'fake-attribution-id';
+    const results = await gtfs.getAttributions({
+      attribution_id: attributionId
     });
     should.exists(results);
     results.should.have.length(0);

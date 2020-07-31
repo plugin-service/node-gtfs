@@ -27,7 +27,7 @@ describe('gtfs.getStops():', () => {
   it('should return an empty array if no stops exist', async () => {
     const stopId = 'fake-stop-id';
 
-    const results = await gtfs.getStops(config, {
+    const results = await gtfs.getStops({
       stop_id: stopId
     });
     should.exists(results);
@@ -35,7 +35,7 @@ describe('gtfs.getStops():', () => {
   });
 
   it('should return array of stops', async () => {
-    const results = await gtfs.getStops(config);
+    const results = await gtfs.getStops();
 
     const expectedResult = {
       stop_id: 'ctbu',
@@ -62,7 +62,7 @@ describe('gtfs.getStops():', () => {
   it('should return array of stops for a specific stopId', async () => {
     const stopId = '70031';
 
-    const results = await gtfs.getStops(config, {
+    const results = await gtfs.getStops({
       stop_id: stopId
     });
 
@@ -91,7 +91,7 @@ describe('gtfs.getStops():', () => {
   it('should return array of stops if it exists for a specific route_id', async () => {
     const routeId = 'Bu-16APR';
 
-    const results = await gtfs.getStops(config, {
+    const results = await gtfs.getStops({
       route_id: routeId
     },
     [],
@@ -137,7 +137,7 @@ describe('gtfs.getStops():', () => {
     const routeId = 'Bu-16APR';
     const directionId = 1;
 
-    const results = await gtfs.getStops(config, {
+    const results = await gtfs.getStops({
       route_id: routeId,
       direction_id: directionId
     },
@@ -171,7 +171,7 @@ describe('gtfs.getStops():', () => {
   it('should return array of stops for a specific trip_id', async () => {
     const tripId = '427a';
 
-    const results = await gtfs.getStops(config, {
+    const results = await gtfs.getStops({
       trip_id: tripId
     },
     [],

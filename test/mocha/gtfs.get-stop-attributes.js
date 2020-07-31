@@ -27,7 +27,7 @@ describe('gtfs.getStopAttributes():', () => {
   it('should return empty array if no stop attributes', async () => {
     const stopId = 'fake-stop-id';
 
-    const results = await gtfs.getStopAttributes(config, {
+    const results = await gtfs.getStopAttributes({
       stop_id: stopId
     });
     should.exists(results);

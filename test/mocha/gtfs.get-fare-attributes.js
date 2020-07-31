@@ -27,7 +27,7 @@ describe('gtfs.getFareAttributes():', () => {
   it('should return empty array if no fare_attributes', async () => {
     const fareId = 'not_real';
 
-    const results = await gtfs.getFareAttributes(config, {
+    const results = await gtfs.getFareAttributes({
       fare_id: fareId
     });
 
@@ -38,7 +38,7 @@ describe('gtfs.getFareAttributes():', () => {
   it('should return expected fare_attributes', async () => {
     const fareId = 'OW_1_20160228';
 
-    const results = await gtfs.getFareAttributes(config, {
+    const results = await gtfs.getFareAttributes({
       fare_id: fareId
     });
 

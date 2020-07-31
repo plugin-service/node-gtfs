@@ -27,7 +27,7 @@ describe('gtfs.getRoutes():', () => {
   it('should return empty array if no routes for given agency exist', async () => {
     const routeId = 'fake-route-id';
 
-    const results = await gtfs.getRoutes(config, {
+    const results = await gtfs.getRoutes({
       route_id: routeId
     });
     should.exists(results);
@@ -35,7 +35,7 @@ describe('gtfs.getRoutes():', () => {
   });
 
   it('should return expected routes', async () => {
-    const results = await gtfs.getRoutes(config,
+    const results = await gtfs.getRoutes(
       {},
       [],
       [['route_long_name', 'ASC']]
@@ -98,7 +98,7 @@ describe('gtfs.getRoutes():', () => {
   });
 
   it('should return expected routes for a specific stop_id', async () => {
-    const results = await gtfs.getRoutes(config,
+    const results = await gtfs.getRoutes(
       { stop_id: '70321' },
       [],
       [['route_long_name', 'ASC']]

@@ -27,7 +27,7 @@ describe('gtfs.getFeedInfo():', () => {
   it('should return empty array if no feed info', async () => {
     const feedPublisherName = 'not_real';
 
-    const results = await gtfs.getFeedInfo(config, {
+    const results = await gtfs.getFeedInfo({
       feed_publisher_name: feedPublisherName
     });
     should.exists(results);

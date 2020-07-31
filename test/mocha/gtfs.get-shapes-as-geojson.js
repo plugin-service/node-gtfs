@@ -26,7 +26,7 @@ describe('gtfs.getShapesAsGeoJSON():', () => {
 
   it('should return geojson with an empty features array if no shapes exist', async () => {
     const shapeId = 'fake-shape-id';
-    const geojson = await gtfs.getShapesAsGeoJSON(config, {
+    const geojson = await gtfs.getShapesAsGeoJSON({
       shape_id: shapeId
     });
 
@@ -36,7 +36,7 @@ describe('gtfs.getShapesAsGeoJSON():', () => {
   });
 
   it('should return geojson with shapes if they exist', async () => {
-    const geojson = await gtfs.getShapesAsGeoJSON(config);
+    const geojson = await gtfs.getShapesAsGeoJSON();
 
     should.exist(geojson);
     geojson.type.should.equal('FeatureCollection');
@@ -48,7 +48,7 @@ describe('gtfs.getShapesAsGeoJSON():', () => {
   it('should return geojson with shapes for a specific routeId', async () => {
     const routeId = 'Lo-16APR';
 
-    const geojson = await gtfs.getShapesAsGeoJSON(config, {
+    const geojson = await gtfs.getShapesAsGeoJSON({
       route_id: routeId
     });
 
@@ -63,7 +63,7 @@ describe('gtfs.getShapesAsGeoJSON():', () => {
     const routeId = 'Lo-16APR';
     const directionId = 0;
 
-    const geojson = await gtfs.getShapesAsGeoJSON(config, {
+    const geojson = await gtfs.getShapesAsGeoJSON({
       route_id: routeId,
       direction_id: directionId
     });
