@@ -43,6 +43,7 @@ describe('gtfs.getShapesAsGeoJSON():', () => {
     geojson.features.length.should.be.above(1);
     should.exist(geojson.features[0].geometry.coordinates);
     geojson.features[0].geometry.coordinates[0].length.should.equal(2);
+    geojson.features[0].properties.route_color.should.startWith('#');
   });
 
   it('should return geojson with shapes for a specific routeId', async () => {
@@ -57,6 +58,7 @@ describe('gtfs.getShapesAsGeoJSON():', () => {
     geojson.features.length.should.equal(3);
     should.exist(geojson.features[0].geometry.coordinates);
     geojson.features[0].geometry.coordinates[0].length.should.equal(2);
+    geojson.features[0].properties.route_color.should.startWith('#');
   });
 
   it('should return geojson with shapes for a specific routeId and directionId', async () => {
@@ -73,5 +75,6 @@ describe('gtfs.getShapesAsGeoJSON():', () => {
     geojson.features.length.should.equal(2);
     should.exist(geojson.features[0].geometry.coordinates);
     geojson.features[0].geometry.coordinates[0].length.should.equal(2);
+    geojson.features[0].properties.route_color.should.startWith('#');
   });
 });
