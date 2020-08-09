@@ -27,6 +27,8 @@ The [GTFS-to-chart](https://github.com/blinktaginc/gtfs-to-chart) app generates 
 If you would like to use this library as a command-line utility, you can install it globally directly from [npm](https://npmjs.org):
 
     npm install gtfs mongoose -g
+    
+[New book on GTFS] (https://www.amazon.in/BetterBus-Implementing-Tracking-GTFS-data/dp/1647604494) avialable in kindle and paperback option in most countries
 
 If you are using this as a node module as part of an application, you can include it in your project's `package.json` file.
 
